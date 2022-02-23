@@ -16,7 +16,7 @@ window.onFindPlace = onFindPlace;
 var gCurrUserLoc;
 
 
-function onInit() {
+function onInit() { 
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
@@ -24,6 +24,14 @@ function onInit() {
         .catch(() => console.log('Error: cannot init map'));
     locService.getLocs()
         .then(renderLocs)
+
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    })
+    var lat = params.lat
+    var lng = params.lng
+    gCurrUserLoc.lat = lat 
+    gCurrUserLoc.lng = lng 
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -51,19 +59,11 @@ function renderLocs(locs) {
         return `<table>
             <tbody>
                 <tr>
-<<<<<<< HEAD
-                    <td class="loc-name">${loc.name}</td>
-                    <td>
-                    <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
-                    <button class="go btn" onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
-                    <button class="delete btn" onclick="onDeleteLoc('${loc.id}')">Delete</button>
-=======
                     <td class="loc-name">${loc.name}:</td>
                     <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <td>
                     <button class = "btn" onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
                     <button class = "btn" onclick="onDeleteLoc('${loc.id}')">Delete</button>
->>>>>>> 4911e46f02ebb2982a573d8dc48222c64e17b5a6
                     </td>
                 </tr>
             </tbody>
@@ -128,7 +128,7 @@ function onCopyLink(elBtn){
                 gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             })
     }
-    navigator.clipboard.writeText(`https://github.io/izingor/travel-tip/index.html?lat=${gCurrUserLoc.lat}&lng=${gCurrUserLoc.lng}`)
+    navigator.clipboard.writeText(`https://izingor.github.io/travel-tip/index.html?lat=${gCurrUserLoc.lat}&lng=${gCurrUserLoc.lng}`)
 
     elBtn.innerText = 'Copied!'
     setTimeout(() => {
