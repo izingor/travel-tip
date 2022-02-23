@@ -1,5 +1,8 @@
+import {utilService} from './util.service.js'
+
 export const locService = {
-    getLocs
+    getLocs,
+    addLoc,
 }
 
 
@@ -9,11 +12,26 @@ const locs = [
 ]
 
 function getLocs() {
-    return new Promise((resolve, reject) => {
-        setTimeout(() => {
-            resolve(locs);
-        }, 2000)
+    return new Promise((resolve) => {
+return resolve(locs)
     });
+}
+
+function addLoc() {
+
+}
+
+function _createLoc(name, lat, lng, createdAt) {
+    const location = {
+        id: utilService.makeId(),
+        name,
+        lat,
+        lng,
+        weather: 'chilly',
+        createdAt,
+    }
+    locs.push(location)
+    console.log(gLocs);
 }
 
 
