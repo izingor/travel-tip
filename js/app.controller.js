@@ -7,7 +7,8 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.onAddLoc = onAddLoc;
-window.onMoveUser = onMoveUser;
+// window.onMoveUser = onMoveUser;
+window.onFindPlace = onFindPlace;
 
 var gCurrUserLoc;
 
@@ -75,8 +76,9 @@ function onGetLocs() {
 function onGetUserPos() {
     getPosition()
         .then(pos => {
-            gCurrUserLoc = { lat: pos.coords.latitude, long: pos.coords.longitude };
-            console.log(gCurrUserLoc);
+            gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+            mapService.addMarker(gCurrUserLoc);
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
@@ -92,7 +94,6 @@ function onPanTo() {
 }
 
 
-function onMoveUser() {
-    // console.log();
-    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.long)
+function onFindPlace(input) {
+    mapService.findPlace(input.value);
 }
