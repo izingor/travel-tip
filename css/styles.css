@@ -16,7 +16,11 @@
 
 /* components */
 
-@import 'components/buttons.ccs';
-@import 'components/buttons.ccs';
+@import 'components/buttons.css';
 @import 'components/main-container.css';
 @import 'components/header.css';
+@import 'components/map-container.css';
+@import 'components/weather-container.css';
+@import 'components/weather-container.css';
+@import 'components/locations-container.css';
+@import 'components/your-location.css';

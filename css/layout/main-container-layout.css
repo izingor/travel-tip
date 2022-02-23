@@ -3,12 +3,12 @@
     height: 90vh;
     background-color: lightcyan;
     display: grid;
-    grid-template-columns: repeat(14, 1fr);
+    grid-template-columns: repeat(15, 1fr);
     grid-template-rows: repeat(14, 1fr);
 }
 
 .map-container {
-    grid-column: 8/15;
+    grid-column: 8/16;
     grid-row: 4/14;
 }
 
@@ -25,17 +25,17 @@
 }
 
 .btn-get-locs {
-    grid-column: 14/15;
+    grid-column: 14/16;
     grid-row: 2/3;
 }
 
 .btn-pan {
-    grid-column: 11/12;
+    grid-column: 11/13;
     grid-row: 2/3;
 }
 
 .btn-add-marker {
-    grid-column: 8/9;
+    grid-column: 8/10;
     grid-row: 2/3;
 }
 
