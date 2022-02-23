@@ -17,3 +17,7 @@
 .flex.space {
     justify-content: space-between;
 }
+
+.flex.column {
+    flex-direction: column;
+}

@@ -1,5 +1,5 @@
-import { locService } from './services/loc.service.js'
-import { mapService } from './services/map.service.js'
+import { locService } from './services/loc.service.js';
+import { mapService } from './services/map.service.js';
 
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
@@ -32,30 +32,57 @@ function onInit() {
         })
         .catch(() => console.log('Error: cannot init map'));
     locService.getLocs()
+<<<<<<< HEAD
+        .then(renderLocs);
+=======
         .then(renderLocs)
 
+<<<<<<< HEAD
     mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
     mapService.addMarker(gCurrUserLoc);
+=======
+    const params = new Proxy(new URLSearchParams(window.location.search), {
+        get: (searchParams, prop) => searchParams.get(prop),
+    })
+    var lat = params.lat
+    var lng = params.lng
+    gCurrUserLoc.lat = lat 
+    gCurrUserLoc.lng = lng 
+>>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
+>>>>>>> 109ca97c12fb0de5042be6fdce8f484d85d356c4
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
     console.log('Getting Pos');
     return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject)
-    })
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
 }
 
 function onAddLoc(ev) {
-    ev.preventDefault()
-    const currLoc = mapService.getCurrLoc()
+    ev.preventDefault();
+    const currLoc = mapService.getCurrLoc();
+    const prmWeather = mapService.getWeather(currLoc);
+    prmWeather.then(res => res.data)
+        .then(renderWeather);
+
     new Promise((resolve) => {
+<<<<<<< HEAD
         resolve(currLoc)
     })
+=======
+            resolve(currLoc);
+        })
+>>>>>>> 109ca97c12fb0de5042be6fdce8f484d85d356c4
         .then(locService.addLoc)
         .then(locService.getLocs)
+<<<<<<< HEAD
+        .then(renderLocs);
+=======
         .then(renderLocs)
         .catch(err => console.log('error ', err))
+>>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
 }
 
 function renderLocs(locs) {
@@ -71,9 +98,9 @@ function renderLocs(locs) {
                     </td>
                 </tr>
             </tbody>
-        </table>`
-    })
-    document.querySelector('.locs').innerHTML = strHTMLs.join('')
+        </table>`;
+    });
+    document.querySelector('.locs').innerHTML = strHTMLs.join('');
 }
 
 function onGoLoc(lat, lng) {
@@ -81,9 +108,11 @@ function onGoLoc(lat, lng) {
 }
 
 function onDeleteLoc(locId) {
-    locService.deleteLoc(locId)
+    console.log(locId);
+    locService.deleteLoc(locId);
+
     locService.getLocs()
-        .then(renderLocs)
+        .then(renderLocs);
 }
 
 function onAddMarker() {
@@ -91,6 +120,15 @@ function onAddMarker() {
     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
 }
 
+<<<<<<< HEAD
+function onGetLocs() {
+    locService.getLocs()
+        .then(locs => {
+            console.log('Locations:', locs);
+            document.querySelector('.locs').innerText = JSON.stringify(locs);
+        });
+}
+=======
 // function onGetLocs() {
 //     locService.getLocs()
 //         .then(locs => {
@@ -98,20 +136,21 @@ function onAddMarker() {
 //             document.querySelector('.locs').innerText = JSON.stringify(locs)
 //         })
 // }
+>>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
 
 function onGetUserPos() {
     getPosition()
         .then(pos => {
             gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-            mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+            mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng);
             mapService.addMarker(gCurrUserLoc);
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
-                `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
+                `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
         })
         .catch(err => {
             console.log('err!!!', err);
-        })
+        });
 }
 
 function onPanTo() {
@@ -125,7 +164,19 @@ function onFindPlace(input) {
     prm.then(res => mapService.panTo(res.lat, res.lng));
 }
 
+<<<<<<< HEAD
 function onCopyLink(elBtn) {
+=======
+<<<<<<< HEAD
+function renderWeather(data) {
+    const elWeather = document.querySelector('.weather-container');
+    var strHTML = `<h4>Temperature: ${Math.floor(data.main.temp - 273)}Celsius</h4>
+                    <h4>Description: ${data.weather[0].description}`
+    elWeather.innerHTML = strHTML;
+    console.log(data);
+=======
+function onCopyLink(elBtn){
+>>>>>>> 109ca97c12fb0de5042be6fdce8f484d85d356c4
     if (!gCurrUserLoc) {
         getPosition()
             .then(pos => {
@@ -138,4 +189,5 @@ function onCopyLink(elBtn) {
     setTimeout(() => {
         elBtn.innerText = 'Copy Link'
     }, 2000)
+>>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
 }

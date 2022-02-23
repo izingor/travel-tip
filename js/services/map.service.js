@@ -3,10 +3,13 @@ export const mapService = {
     addMarker,
     panTo,
     findPlace,
-    getCurrLoc
+    getCurrLoc,
+    getWeather
 }
 
 import { locService } from "./loc.service.js";
+
+const W_KEY = 'e898b4ba86009c87130bc0974a1a9761'
 
 var gMap;
 var gCurrLoc = { lat: 32.0749831, lng: 34.9120554 }
@@ -86,4 +89,11 @@ function findPlace(value) {
             locService.addInputLoc({ lat: res.data.results[0].geometry.location.lat, lng: res.data.results[0].geometry.location.lng, name: value });
             return res.data.results[0].geometry.location;
         });
+}
+
+
+
+function getWeather({ lat, lng }) {
+
+    return axios.get(`http://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lng}&APPID=${W_KEY}`)
 }
