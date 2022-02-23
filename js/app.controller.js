@@ -18,6 +18,8 @@ function onInit() {
             console.log('Map is ready');
         })
         .catch(() => console.log('Error: cannot init map'));
+locService.getLocs()
+    .then(renderLocs)
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -28,14 +30,12 @@ function getPosition() {
     })
 }
 
-function onAddLoc(ev, mouseEv) {
-    ev.preventDefault();
-    console.log(ev, mouseEv);
-    const { lat, lng } = mouseEv.latLng.toJSON();
-
-    new Promise((resolve) => {
-            resolve(lat, lng)
-        })
+function onAddLoc(ev) {
+    ev.preventDefault()
+    const currLoc = mapService.getCurrLoc()
+    const prm = new Promise((resolve) => {
+        resolve(currLoc)
+    })
         .then(locService.addLoc)
         .then(locService.getLocs)
         .then(renderLocs)
@@ -43,7 +43,7 @@ function onAddLoc(ev, mouseEv) {
 
 function renderLocs(locs) {
     const strHTMLs = locs.map(loc => {
-        `<table>
+        return `<table>
             <tbody>
                 <tr>,
                     <td class="loc-name">${loc.name}</td>
@@ -56,7 +56,8 @@ function renderLocs(locs) {
             </tbody>
         </table>`
     })
-    document.querySelector('.my-location-container').innerHTML = strHTMLs.join('')
+    console.log(strHTMLs);
+    document.querySelector('.locs').innerHTML = strHTMLs.join('')
 }
 
 function onAddMarker() {
@@ -94,5 +95,5 @@ function onPanTo() {
 
 function onMoveUser() {
     // console.log();
-    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.long)
+    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
 }
