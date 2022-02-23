@@ -78,10 +78,9 @@ function _connectGoogleApi() {
 
 
 function findPlace(value) {
-    const placeService = new google.maps.places.PlacesService(map);
-
-    placeService.findPlaceFromQuery(request);
-
-    console.log(value);
-    // console.log(foundstuff);
+    return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${value}&key=AIzaSyDXNxZYGzQXRBraA5rsPqLrOhvqO8pHxA8`)
+        .then(res => {
+            console.log(res.data)
+            return res.data.results[0].geometry.location;
+        });
 }

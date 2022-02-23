@@ -53,7 +53,7 @@ function renderLocs(locs) {
                     <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <td>
                     <button onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
-                    <button onclick="onDeleteLoc(${loc.id})">Delete</button>
+                    <button onclick="onDeleteLoc('${loc.id}')">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -62,6 +62,7 @@ function renderLocs(locs) {
     console.log(strHTMLs);
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
 }
+
 function onGoLoc(lat, lng) {
     mapService.panTo(lat, lng);
 }
@@ -107,5 +108,6 @@ function onPanTo() {
 
 
 function onFindPlace(input) {
-    mapService.findPlace(input.value);
+    const prm = mapService.findPlace(input.value);
+    prm.then(res => mapService.panTo(res.lat, res.lng));
 }
