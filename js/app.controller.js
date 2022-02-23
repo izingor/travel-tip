@@ -7,9 +7,10 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.onAddLoc = onAddLoc;
-window.onMoveUser = onMoveUser;
 window.onGoLoc = onGoLoc;
 window.onDeleteLoc = onDeleteLoc;
+// window.onMoveUser = onMoveUser;
+window.onFindPlace = onFindPlace;
 
 var gCurrUserLoc;
 
@@ -20,8 +21,8 @@ function onInit() {
             console.log('Map is ready');
         })
         .catch(() => console.log('Error: cannot init map'));
-locService.getLocs()
-    .then(renderLocs)
+    locService.getLocs()
+        .then(renderLocs)
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -35,9 +36,9 @@ function getPosition() {
 function onAddLoc(ev) {
     ev.preventDefault()
     const currLoc = mapService.getCurrLoc()
-    const prm = new Promise((resolve) => {
-        resolve(currLoc)
-    })
+    new Promise((resolve) => {
+            resolve(currLoc)
+        })
         .then(locService.addLoc)
         .then(locService.getLocs)
         .then(renderLocs)
@@ -47,7 +48,7 @@ function renderLocs(locs) {
     const strHTMLs = locs.map(loc => {
         return `<table>
             <tbody>
-                <tr>,
+                <tr>
                     <td class="loc-name">${loc.name}</td>
                     <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <td>
@@ -87,8 +88,9 @@ function onGetLocs() {
 function onGetUserPos() {
     getPosition()
         .then(pos => {
-            gCurrUserLoc = { lat: pos.coords.latitude, long: pos.coords.longitude };
-            console.log(gCurrUserLoc);
+            gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+            mapService.addMarker(gCurrUserLoc);
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
@@ -104,7 +106,6 @@ function onPanTo() {
 }
 
 
-function onMoveUser() {
-    // console.log();
-    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+function onFindPlace(input) {
+    mapService.findPlace(input.value);
 }

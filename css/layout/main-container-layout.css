@@ -21,7 +21,6 @@
 .weather-container {
     grid-column: 1/7;
     grid-row: 4/7;
-    background-color: lightslategray;
 }
 
 .btn-get-locs {
@@ -42,5 +41,9 @@
 .your-location {
     grid-column: 1/7;
     grid-row: 2/3;
-    background-color: lightcoral;
+}
+
+.btn-move-user {
+    grid-column: 8/10;
+    grid-row: 2/3;
 }

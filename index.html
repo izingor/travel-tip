@@ -15,7 +15,7 @@
         <div class="header-content main-layout flex space align-items">
             <h1 class="logo">TravelTip</h1>
             <div class="my-location-container">
-                <input type="search" class="search-input" placeholder="   Enter Location">
+                <input type="search" class="search-input" placeholder="   Enter Location" onchange="onFindPlace(this)">
                 <button onclick="onGetUserPos()" class="btn btn-user-pos">Get User Position</button>
             </div>
         </div>
@@ -32,7 +32,7 @@
         <button onclick="onAddMarker()" class="btn btn-add-marker">Add Marker Speific Location</button>
         <button onclick="onGetLocs()" class="btn btn-get-locs">Get Locations</button>
         <button onclick="onPanTo()" class="btn btn-pan">Pan Map to Tokyo</button>
-        <button onclick="onMoveUser()" class="btn btn-move-user">Move to my location</button>
+        <!-- <button onclick="onMoveUser()" class="btn btn-move-user">Move to my location</button> -->
 
         <div class="locations-container">
             <p>Locations: <span class="locs"></span></p>

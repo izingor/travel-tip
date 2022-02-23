@@ -1,13 +1,13 @@
-
 export const mapService = {
     initMap,
     addMarker,
     panTo,
-    getCurrLoc,
+    findPlace,
+    getCurrLoc
 }
 
 var gMap;
-var gCurrLoc = { lat: 32.0749831, lng: 34.9120554}
+var gCurrLoc = { lat: 32.0749831, lng: 34.9120554 }
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('InitMap');
@@ -16,9 +16,9 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
             console.log('google available');
             gMap = new google.maps.Map(
                 document.querySelector('#map'), {
-                center: { lat, lng },
-                zoom: 15
-            })
+                    center: { lat, lng },
+                    zoom: 15
+                })
             console.log('Map!', gMap);
         })
         .then(() => {
@@ -42,7 +42,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
         })
 }
 
-function getCurrLoc(){
+function getCurrLoc() {
     return gCurrLoc
 }
 
@@ -66,7 +66,7 @@ function _connectGoogleApi() {
     if (window.google) return Promise.resolve()
     const API_KEY = 'AIzaSyDXNxZYGzQXRBraA5rsPqLrOhvqO8pHxA8';
     var elGoogleApi = document.createElement('script');
-    elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}`;
+    elGoogleApi.src = `https://maps.googleapis.com/maps/api/js?key=${API_KEY}&libraries=places`;
     elGoogleApi.async = true;
     document.body.append(elGoogleApi);
 
@@ -74,4 +74,14 @@ function _connectGoogleApi() {
         elGoogleApi.onload = resolve;
         elGoogleApi.onerror = () => reject('Google script failed to load')
     })
+}
+
+
+function findPlace(value) {
+    const placeService = new google.maps.places.PlacesService(map);
+
+    placeService.findPlaceFromQuery(request);
+
+    console.log(value);
+    // console.log(foundstuff);
 }

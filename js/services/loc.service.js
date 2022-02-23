@@ -24,12 +24,12 @@ console.log(lat, lng);
 }
 
 function deleteLoc(locId) {
-    const locIdx = gLocs.findIndex(loc => {
+    const locIdx = locs.findIndex(loc => {
         return locId === loc.id
     })
     console.log(locIdx);
-    gLocs.splice(locIdx, 1)
-    storageService.save('locDB', gLocs)
+    locs.splice(locIdx, 1)
+    storageService.save('locDB', locs)
 }
 
 function _createLoc(name, lat, lng) {
