@@ -16,7 +16,16 @@ window.onFindPlace = onFindPlace;
 var gCurrUserLoc;
 
 
-function onInit() { 
+function onInit() {
+    const url = new URL(window.location.href);
+    var lat;
+    var lng;
+    if (url.searchParams.get('lat')) {
+        lat = +url.searchParams.get('lat');
+        lng = +url.searchParams.get('lng');
+        gCurrUserLoc = {lat, lng}
+    }
+
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
@@ -25,13 +34,8 @@ function onInit() {
     locService.getLocs()
         .then(renderLocs)
 
-    const params = new Proxy(new URLSearchParams(window.location.search), {
-        get: (searchParams, prop) => searchParams.get(prop),
-    })
-    var lat = params.lat
-    var lng = params.lng
-    gCurrUserLoc.lat = lat 
-    gCurrUserLoc.lng = lng 
+    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+    mapService.addMarker(gCurrUserLoc);
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -46,8 +50,8 @@ function onAddLoc(ev) {
     ev.preventDefault()
     const currLoc = mapService.getCurrLoc()
     new Promise((resolve) => {
-            resolve(currLoc)
-        })
+        resolve(currLoc)
+    })
         .then(locService.addLoc)
         .then(locService.getLocs)
         .then(renderLocs)
@@ -121,7 +125,7 @@ function onFindPlace(input) {
     prm.then(res => mapService.panTo(res.lat, res.lng));
 }
 
-function onCopyLink(elBtn){
+function onCopyLink(elBtn) {
     if (!gCurrUserLoc) {
         getPosition()
             .then(pos => {
