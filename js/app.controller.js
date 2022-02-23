@@ -53,13 +53,12 @@ function renderLocs(locs) {
                     <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <td>
                     <button onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
-                    <button onclick="onDeleteLoc(${loc.id})">Delete</button>
+                    <button onclick="onDeleteLoc('${loc.id}')">Delete</button>
                     </td>
                 </tr>
             </tbody>
         </table>`
     })
-    console.log(strHTMLs);
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
 }
 function onGoLoc(lat, lng) {
@@ -67,6 +66,7 @@ function onGoLoc(lat, lng) {
 }
 
 function onDeleteLoc(locId) {
+    console.log(locId);
     locService.deleteLoc(locId)
     locService.getLocs()
         .then(renderLocs)
