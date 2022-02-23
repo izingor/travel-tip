@@ -24,10 +24,35 @@ function getPosition() {
     })
 }
 
-function onAddLoc(ev){
-    ev.preventDefault()
-locService.addLoc()
-.then(locService.getLocs)
+function onAddLoc(ev, mouseEv) {
+    ev.preventDefault();
+    console.log(ev, mouseEv);
+    const { lat, lng } = mouseEv.latLng.toJSON();
+
+    new Promise((resolve) => {
+        resolve(lat, lng)
+    })
+    .then(locService.addLoc)
+    .then(locService.getLocs)
+    .then(renderLocs)
+}
+
+function renderLocs(locs) {
+    const strHTMLs = locs.map(loc => {
+        `<table>
+            <tbody>
+                <tr>,
+                    <td class="loc-name">${loc.name}</td>
+                    <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
+                    <td>
+                    <button onclick="onGoLoc()">Go</button>
+                    <button onclick="onDeleteLoc()">Delete</button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>`
+    })
+    document.querySelector('.my-location-container').innerHTML = strHTMLs.join('')
 }
 
 function onAddMarker() {
