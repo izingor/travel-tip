@@ -29,7 +29,7 @@ function deleteLoc(locId) {
     })
     console.log(locIdx);
     locs.splice(locIdx, 1)
-    storageService.save('locDB', locs)
+    storageService.save(STORAGE_KEY, locs)
 }
 
 function _createLoc(name, lat, lng) {

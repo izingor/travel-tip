@@ -59,7 +59,6 @@ function renderLocs(locs) {
             </tbody>
         </table>`
     })
-    console.log(strHTMLs);
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
 }
 
@@ -68,6 +67,7 @@ function onGoLoc(lat, lng) {
 }
 
 function onDeleteLoc(locId) {
+    console.log(locId);
     locService.deleteLoc(locId)
     locService.getLocs()
         .then(renderLocs)
