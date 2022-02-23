@@ -8,6 +8,8 @@ window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.onAddLoc = onAddLoc;
 window.onMoveUser = onMoveUser;
+window.onGoLoc = onGoLoc;
+window.onDeleteLoc = onDeleteLoc;
 
 var gCurrUserLoc;
 
@@ -49,8 +51,8 @@ function renderLocs(locs) {
                     <td class="loc-name">${loc.name}</td>
                     <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <td>
-                    <button onclick="onGoLoc()">Go</button>
-                    <button onclick="onDeleteLoc()">Delete</button>
+                    <button onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
+                    <button onclick="onDeleteLoc(${loc.id})">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -58,6 +60,15 @@ function renderLocs(locs) {
     })
     console.log(strHTMLs);
     document.querySelector('.locs').innerHTML = strHTMLs.join('')
+}
+function onGoLoc(lat, lng) {
+    mapService.panTo(lat, lng);
+}
+
+function onDeleteLoc(locId) {
+    locService.deleteLoc(locId)
+    locService.getLocs()
+        .then(renderLocs)
 }
 
 function onAddMarker() {

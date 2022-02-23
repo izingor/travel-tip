@@ -4,6 +4,7 @@ import { utilService } from './util.service.js'
 export const locService = {
     getLocs,
     addLoc,
+    deleteLoc,
 }
 
 const STORAGE_KEY = 'locsDB'
@@ -11,7 +12,7 @@ const locs = []
 
 function getLocs() {
     return new Promise((resolve) => {
-        resolve(locs)
+            resolve(locs);
     });
 }
 
@@ -20,6 +21,15 @@ const {lat, lng} = loc
 console.log(lat, lng);
     const locName = document.querySelector('input[name=location]').value
     _createLoc(locName, lat, lng)
+}
+
+function deleteLoc(locId) {
+    const locIdx = gLocs.findIndex(loc => {
+        return locId === loc.id
+    })
+    console.log(locIdx);
+    gLocs.splice(locIdx, 1)
+    storageService.save('locDB', gLocs)
 }
 
 function _createLoc(name, lat, lng) {
