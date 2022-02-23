@@ -51,11 +51,19 @@ function renderLocs(locs) {
         return `<table>
             <tbody>
                 <tr>
+<<<<<<< HEAD
                     <td class="loc-name">${loc.name}</td>
                     <td>
                     <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <button class="go btn" onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
                     <button class="delete btn" onclick="onDeleteLoc('${loc.id}')">Delete</button>
+=======
+                    <td class="loc-name">${loc.name}:</td>
+                    <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
+                    <td>
+                    <button class = "btn" onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
+                    <button class = "btn" onclick="onDeleteLoc('${loc.id}')">Delete</button>
+>>>>>>> 4911e46f02ebb2982a573d8dc48222c64e17b5a6
                     </td>
                 </tr>
             </tbody>

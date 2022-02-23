@@ -6,6 +6,8 @@ export const mapService = {
     getCurrLoc
 }
 
+import { locService } from "./loc.service.js";
+
 var gMap;
 var gCurrLoc = { lat: 32.0749831, lng: 34.9120554 }
 
@@ -81,6 +83,7 @@ function findPlace(value) {
     return axios.get(`https://maps.googleapis.com/maps/api/geocode/json?address=${value}&key=AIzaSyDXNxZYGzQXRBraA5rsPqLrOhvqO8pHxA8`)
         .then(res => {
             console.log(res.data)
+            locService.addInputLoc({ lat: res.data.results[0].geometry.location.lat, lng: res.data.results[0].geometry.location.lng, name: value });
             return res.data.results[0].geometry.location;
         });
 }
