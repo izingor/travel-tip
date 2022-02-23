@@ -1,5 +1,5 @@
-import { locService } from './services/loc.service.js'
-import { mapService } from './services/map.service.js'
+import { locService } from './services/loc.service.js';
+import { mapService } from './services/map.service.js';
 
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
@@ -22,26 +22,30 @@ function onInit() {
         })
         .catch(() => console.log('Error: cannot init map'));
     locService.getLocs()
-        .then(renderLocs)
+        .then(renderLocs);
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
 function getPosition() {
     console.log('Getting Pos');
     return new Promise((resolve, reject) => {
-        navigator.geolocation.getCurrentPosition(resolve, reject)
-    })
+        navigator.geolocation.getCurrentPosition(resolve, reject);
+    });
 }
 
 function onAddLoc(ev) {
-    ev.preventDefault()
-    const currLoc = mapService.getCurrLoc()
+    ev.preventDefault();
+    const currLoc = mapService.getCurrLoc();
+    const prmWeather = mapService.getWeather(currLoc);
+    prmWeather.then(res => res.data)
+        .then(renderWeather);
+
     new Promise((resolve) => {
-            resolve(currLoc)
+            resolve(currLoc);
         })
         .then(locService.addLoc)
         .then(locService.getLocs)
-        .then(renderLocs)
+        .then(renderLocs);
 }
 
 function renderLocs(locs) {
@@ -57,9 +61,9 @@ function renderLocs(locs) {
                     </td>
                 </tr>
             </tbody>
-        </table>`
-    })
-    document.querySelector('.locs').innerHTML = strHTMLs.join('')
+        </table>`;
+    });
+    document.querySelector('.locs').innerHTML = strHTMLs.join('');
 }
 
 function onGoLoc(lat, lng) {
@@ -68,9 +72,9 @@ function onGoLoc(lat, lng) {
 
 function onDeleteLoc(locId) {
     console.log(locId);
-    locService.deleteLoc(locId)
+    locService.deleteLoc(locId);
     locService.getLocs()
-        .then(renderLocs)
+        .then(renderLocs);
 }
 
 function onAddMarker() {
@@ -81,24 +85,24 @@ function onAddMarker() {
 function onGetLocs() {
     locService.getLocs()
         .then(locs => {
-            console.log('Locations:', locs)
-            document.querySelector('.locs').innerText = JSON.stringify(locs)
-        })
+            console.log('Locations:', locs);
+            document.querySelector('.locs').innerText = JSON.stringify(locs);
+        });
 }
 
 function onGetUserPos() {
     getPosition()
         .then(pos => {
             gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
-            mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+            mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng);
             mapService.addMarker(gCurrUserLoc);
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
-                `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
+                `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`;
         })
         .catch(err => {
             console.log('err!!!', err);
-        })
+        });
 }
 
 function onPanTo() {
@@ -110,4 +114,12 @@ function onPanTo() {
 function onFindPlace(input) {
     const prm = mapService.findPlace(input.value);
     prm.then(res => mapService.panTo(res.lat, res.lng));
+}
+
+function renderWeather(data) {
+    const elWeather = document.querySelector('.weather-container');
+    var strHTML = `<h4>Temperature: ${Math.floor(data.main.temp - 273)}Celsius</h4>
+                    <h4>Description: ${data.weather[0].description}`
+    elWeather.innerHTML = strHTML;
+    console.log(data);
 }
