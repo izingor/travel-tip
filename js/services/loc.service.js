@@ -1,35 +1,43 @@
 import { storageService } from './storage.service.js';
-import { utilService } from './util.service.js'
+import { utilService } from './util.service.js';
 
 export const locService = {
     getLocs,
     addLoc,
     deleteLoc,
-}
+    addInputLoc
+};
 
-const STORAGE_KEY = 'locsDB'
-const locs = []
+const STORAGE_KEY = 'locsDB';
+const locs = [];
 
 function getLocs() {
     return new Promise((resolve) => {
-            resolve(locs);
+        resolve(locs);
     });
 }
 
+function addInputLoc(input) {
+
+    _createLoc(input.name, input.lat, input.lng)
+}
+
+
 function addLoc(loc) {
-const {lat, lng} = loc
-console.log(lat, lng);
-    const locName = document.querySelector('input[name=location]').value
-    _createLoc(locName, lat, lng)
+    const { lat, lng } = loc;
+    console.log(lat, lng);
+
+    const locName = document.querySelector('input[name=location]').value;
+    _createLoc(locName, lat, lng);
 }
 
 function deleteLoc(locId) {
     const locIdx = locs.findIndex(loc => {
-        return locId === loc.id
-    })
+        return locId === loc.id;
+    });
     console.log(locIdx);
-    locs.splice(locIdx, 1)
-    storageService.save(STORAGE_KEY, locs)
+    locs.splice(locIdx, 1);
+    storageService.save(STORAGE_KEY, locs);
 }
 
 function _createLoc(name, lat, lng) {
@@ -41,10 +49,8 @@ function _createLoc(name, lat, lng) {
         weather: 'chilly',
         createdAt: Date.now(),
         updatedAt: Date.now()
-    } 
-    locs.unshift(location)
+    };
+    locs.unshift(location);
     console.log(locs);
-    storageService.save(STORAGE_KEY, locs)
+    storageService.save(STORAGE_KEY, locs);
 }
-
-
