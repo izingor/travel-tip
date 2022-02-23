@@ -1,37 +1,39 @@
-import {utilService} from './util.service.js'
+import { storageService } from './storage.service.js';
+import { utilService } from './util.service.js'
 
 export const locService = {
     getLocs,
     addLoc,
 }
 
-
-const locs = [
-    { name: 'Greatplace', lat: 32.047104, lng: 34.832384 }, 
-    { name: 'Neveragain', lat: 32.047201, lng: 34.832581 }
-]
+const STORAGE_KEY = 'locsDB'
+const locs = []
 
 function getLocs() {
     return new Promise((resolve) => {
-return resolve(locs)
+        return resolve(locs)
     });
 }
 
-function addLoc() {
-
+function addLoc(lat, lng) {
+    console.log(lat, lng);
+    const locName = document.querySelector('input[name=location]').value
+    _createLoc(locName, lat, lng)
 }
 
-function _createLoc(name, lat, lng, createdAt) {
+function _createLoc(name, lat, lng) {
     const location = {
         id: utilService.makeId(),
         name,
         lat,
         lng,
         weather: 'chilly',
-        createdAt,
+        createdAt: Date.now(),
+        updatedAt: Date.now()
     }
     locs.push(location)
-    console.log(gLocs);
+    console.log(locs);
+    storageService.save(STORAGE_KEY, locs)
 }
 
 
