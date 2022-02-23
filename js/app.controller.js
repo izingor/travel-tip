@@ -4,13 +4,14 @@ import { mapService } from './services/map.service.js'
 window.onload = onInit;
 window.onAddMarker = onAddMarker;
 window.onPanTo = onPanTo;
-window.onGetLocs = onGetLocs;
+window.onCopyLink = onCopyLink;
 window.onGetUserPos = onGetUserPos;
 window.onAddLoc = onAddLoc;
 window.onGoLoc = onGoLoc;
 window.onDeleteLoc = onDeleteLoc;
 // window.onMoveUser = onMoveUser;
 window.onFindPlace = onFindPlace;
+
 
 var gCurrUserLoc;
 
@@ -42,6 +43,7 @@ function onAddLoc(ev) {
         .then(locService.addLoc)
         .then(locService.getLocs)
         .then(renderLocs)
+        .catch(err => console.log('error ', err))
 }
 
 function renderLocs(locs) {
@@ -50,10 +52,10 @@ function renderLocs(locs) {
             <tbody>
                 <tr>
                     <td class="loc-name">${loc.name}</td>
-                    <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
                     <td>
-                    <button onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
-                    <button onclick="onDeleteLoc('${loc.id}')">Delete</button>
+                    <td class="loc-latlng">${loc.lat}, ${loc.lng}</td>
+                    <button class="go btn" onclick="onGoLoc(${loc.lat}, ${loc.lng})">Go</button>
+                    <button class="delete btn" onclick="onDeleteLoc('${loc.id}')">Delete</button>
                     </td>
                 </tr>
             </tbody>
@@ -67,7 +69,6 @@ function onGoLoc(lat, lng) {
 }
 
 function onDeleteLoc(locId) {
-    console.log(locId);
     locService.deleteLoc(locId)
     locService.getLocs()
         .then(renderLocs)
@@ -78,13 +79,13 @@ function onAddMarker() {
     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
 }
 
-function onGetLocs() {
-    locService.getLocs()
-        .then(locs => {
-            console.log('Locations:', locs)
-            document.querySelector('.locs').innerText = JSON.stringify(locs)
-        })
-}
+// function onGetLocs() {
+//     locService.getLocs()
+//         .then(locs => {
+//             console.log('Locations:', locs)
+//             document.querySelector('.locs').innerText = JSON.stringify(locs)
+//         })
+// }
 
 function onGetUserPos() {
     getPosition()
@@ -110,4 +111,19 @@ function onPanTo() {
 function onFindPlace(input) {
     const prm = mapService.findPlace(input.value);
     prm.then(res => mapService.panTo(res.lat, res.lng));
+}
+
+function onCopyLink(elBtn){
+    if (!gCurrUserLoc) {
+        getPosition()
+            .then(pos => {
+                gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
+            })
+    }
+    navigator.clipboard.writeText(`https://github.io/izingor/travel-tip/index.html?lat=${gCurrUserLoc.lat}&lng=${gCurrUserLoc.lng}`)
+
+    elBtn.innerText = 'Copied!'
+    setTimeout(() => {
+        elBtn.innerText = 'Copy Link'
+    }, 2000)
 }
