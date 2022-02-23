@@ -3,7 +3,4 @@
         height: 90vh;
         background-color: var(--main);
         padding: 0 20px;
-        /* border-left: 1px solid var(--border); */
-        /* border-right: 1px solid var(--border); */
-        /* box-shadow: var(--border-shadow-light); */
     }

@@ -7,6 +7,10 @@ window.onPanTo = onPanTo;
 window.onGetLocs = onGetLocs;
 window.onGetUserPos = onGetUserPos;
 window.onAddLoc = onAddLoc;
+window.onMoveUser = onMoveUser;
+
+var gCurrUserLoc;
+
 
 function onInit() {
     mapService.initMap()
@@ -30,11 +34,11 @@ function onAddLoc(ev, mouseEv) {
     const { lat, lng } = mouseEv.latLng.toJSON();
 
     new Promise((resolve) => {
-        resolve(lat, lng)
-    })
-    .then(locService.addLoc)
-    .then(locService.getLocs)
-    .then(renderLocs)
+            resolve(lat, lng)
+        })
+        .then(locService.addLoc)
+        .then(locService.getLocs)
+        .then(renderLocs)
 }
 
 function renderLocs(locs) {
@@ -71,6 +75,8 @@ function onGetLocs() {
 function onGetUserPos() {
     getPosition()
         .then(pos => {
+            gCurrUserLoc = { lat: pos.coords.latitude, long: pos.coords.longitude };
+            console.log(gCurrUserLoc);
             console.log('User position is:', pos.coords);
             document.querySelector('.user-pos').innerText =
                 `Latitude: ${pos.coords.latitude} - Longitude: ${pos.coords.longitude}`
@@ -79,7 +85,14 @@ function onGetUserPos() {
             console.log('err!!!', err);
         })
 }
+
 function onPanTo() {
     console.log('Panning the Map');
     mapService.panTo(35.6895, 139.6917);
+}
+
+
+function onMoveUser() {
+    // console.log();
+    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.long)
 }
