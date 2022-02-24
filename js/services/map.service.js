@@ -12,7 +12,7 @@ import { locService } from "./loc.service.js";
 const W_KEY = 'e898b4ba86009c87130bc0974a1a9761'
 
 var gMap;
-var gCurrLoc = { lat: 32.0749831, lng: 34.9120554 }
+var gClickedLoc = {}
 
 function initMap(lat = 32.0749831, lng = 34.9120554) {
     console.log('InitMap');
@@ -33,11 +33,10 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
             });
             infoWindow.open(gMap);
             infoWindow.close();
-            // Configure the click listener.
+
             gMap.addListener("click", (mapsMouseEvent) => {
-                gCurrLoc = mapsMouseEvent.latLng.toJSON();
-                const contentStr = `<form onsubmit="onAddLoc(event)">` + '<input name="location" placeholder="Name of location?">' + '</form>'
-                infoWindow.close();
+                gClickedLoc = mapsMouseEvent.latLng.toJSON();
+                const contentStr = '<h4>What is the name of this location?</h4>' + '<form onsubmit="onAddLoc(event)">' + '<input name="location" placeholder="Name of location">' + '</form>'
                 infoWindow = new google.maps.InfoWindow({
                     content: contentStr,
                     position: mapsMouseEvent.latLng,
@@ -48,7 +47,7 @@ function initMap(lat = 32.0749831, lng = 34.9120554) {
 }
 
 function getCurrLoc() {
-    return gCurrLoc
+    return gClickedLoc
 }
 
 function addMarker(loc) {

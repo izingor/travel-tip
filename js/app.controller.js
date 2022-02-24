@@ -18,18 +18,16 @@ var gCurrUserLoc;
 
 function onInit() {
 
-mapService.initMap()
-    .then(() => {
-        console.log('Map is ready');
-        searchParams()
-    })
-    .catch(() => console.log('Error: cannot init map'));
+    mapService.initMap()
+        .then(() => {
+            console.log('Map is ready');
+            searchParams()
+        })
+        .catch(() => console.log('Error: cannot init map'));
+    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
 
-locService.getLocs()
-    .then(renderLocs);
-
-mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
-mapService.addMarker(gCurrUserLoc);
+    locService.getLocs()
+        .then(renderLocs);
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -43,10 +41,12 @@ function getPosition() {
 function onAddLoc(ev) {
     ev.preventDefault();
     const currLoc = mapService.getCurrLoc();
+    console.log(currLoc);
     const prmWeather = mapService.getWeather(currLoc);
     prmWeather.then(res => res.data)
-        .then(renderWeather);
-
+    .then(renderWeather);
+    
+    mapService.addMarker(currLoc)
     new Promise((resolve) => {
         resolve(currLoc)
     })
@@ -54,6 +54,8 @@ function onAddLoc(ev) {
         .then(locService.getLocs)
         .then(renderLocs)
         .catch(err => console.log('error ', err))
+
+    document.querySelector('input[name=location]').innerText = ''
 }
 
 function renderLocs(locs) {
@@ -119,15 +121,14 @@ function onPanTo() {
     mapService.panTo(35.6895, 139.6917);
 }
 
-function searchParams(){
+function searchParams() {
     const url = new URL(window.location.href);
     let lat;
     let lng;
     if (url.searchParams.get('lat')) {
         lat = +url.searchParams.get('lat');
         lng = +url.searchParams.get('lng');
-        gCurrLatLng.lat = lat;
-        gCurrLatLng.lng = lng;
+        gCurrUserLoc = { lat, lng }
     }
 }
 
