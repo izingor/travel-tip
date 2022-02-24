@@ -16,16 +16,13 @@ window.onFindPlace = onFindPlace;
 var gCurrUserLoc;
 
 
-function onInit() { 
+function onInit() {
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
         })
         .catch(() => console.log('Error: cannot init map'));
     locService.getLocs()
-<<<<<<< HEAD
-        .then(renderLocs);
-=======
         .then(renderLocs)
 
     const params = new Proxy(new URLSearchParams(window.location.search), {
@@ -33,9 +30,8 @@ function onInit() {
     })
     var lat = params.lat
     var lng = params.lng
-    gCurrUserLoc.lat = lat 
-    gCurrUserLoc.lng = lng 
->>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
+    gCurrUserLoc.lat = lat
+    gCurrUserLoc.lng = lng
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -58,12 +54,8 @@ function onAddLoc(ev) {
         })
         .then(locService.addLoc)
         .then(locService.getLocs)
-<<<<<<< HEAD
-        .then(renderLocs);
-=======
         .then(renderLocs)
         .catch(err => console.log('error ', err))
->>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
 }
 
 function renderLocs(locs) {
@@ -89,12 +81,8 @@ function onGoLoc(lat, lng) {
 }
 
 function onDeleteLoc(locId) {
-<<<<<<< HEAD
     console.log(locId);
-    locService.deleteLoc(locId);
-=======
     locService.deleteLoc(locId)
->>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
     locService.getLocs()
         .then(renderLocs);
 }
@@ -104,7 +92,6 @@ function onAddMarker() {
     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
 }
 
-<<<<<<< HEAD
 function onGetLocs() {
     locService.getLocs()
         .then(locs => {
@@ -112,7 +99,6 @@ function onGetLocs() {
             document.querySelector('.locs').innerText = JSON.stringify(locs);
         });
 }
-=======
 // function onGetLocs() {
 //     locService.getLocs()
 //         .then(locs => {
@@ -120,7 +106,6 @@ function onGetLocs() {
 //             document.querySelector('.locs').innerText = JSON.stringify(locs)
 //         })
 // }
->>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
 
 function onGetUserPos() {
     getPosition()
@@ -148,15 +133,15 @@ function onFindPlace(input) {
     prm.then(res => mapService.panTo(res.lat, res.lng));
 }
 
-<<<<<<< HEAD
 function renderWeather(data) {
     const elWeather = document.querySelector('.weather-container');
-    var strHTML = `<h4>Temperature: ${Math.floor(data.main.temp - 273)}Celsius</h4>
+    var strHTML = `<h4>Temperature: ${Math.floor(data.main.temp - 273)} Celsius</h4>
                     <h4>Description: ${data.weather[0].description}`
     elWeather.innerHTML = strHTML;
     console.log(data);
-=======
-function onCopyLink(elBtn){
+}
+
+function onCopyLink(elBtn) {
     if (!gCurrUserLoc) {
         getPosition()
             .then(pos => {
@@ -169,5 +154,4 @@ function onCopyLink(elBtn){
     setTimeout(() => {
         elBtn.innerText = 'Copy Link'
     }, 2000)
->>>>>>> e6be76cd73e6b1362ae5dbd3d8c65283fc2b778c
 }
