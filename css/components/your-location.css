@@ -4,8 +4,5 @@
     background-color: var(--main);
     font-size: 0.8rem;
     height: 100%;
-}
-
-.loc-name {
-    font-size: 1.2rem;
+    text-align: center;
 }

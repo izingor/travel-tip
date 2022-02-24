@@ -48,8 +48,8 @@ function onAddLoc(ev) {
     
     mapService.addMarker(currLoc)
     new Promise((resolve) => {
-        resolve(currLoc)
-    })
+            resolve(currLoc)
+        })
         .then(locService.addLoc)
         .then(locService.getLocs)
         .then(renderLocs)
@@ -148,7 +148,7 @@ function onCopyLink(elBtn) {
 
 function renderWeather(data) {
     const elWeather = document.querySelector('.weather-container');
-    var strHTML = `<h4>Temperature: ${Math.floor(data.main.temp - 273)}Celsius</h4>
+    var strHTML = `<h4>Temperature: ${Math.floor(data.main.temp - 273)} Celsius</h4>
                     <h4>Description: ${data.weather[0].description}`
     elWeather.innerHTML = strHTML;
     console.log(data);
