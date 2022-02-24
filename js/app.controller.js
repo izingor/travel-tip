@@ -17,21 +17,19 @@ var gCurrUserLoc;
 
 
 function onInit() {
+
     mapService.initMap()
         .then(() => {
             console.log('Map is ready');
+            searchParams()
         })
         .catch(() => console.log('Error: cannot init map'));
-    locService.getLocs()
-        .then(renderLocs)
 
-    const params = new Proxy(new URLSearchParams(window.location.search), {
-        get: (searchParams, prop) => searchParams.get(prop),
-    })
-    var lat = params.lat
-    var lng = params.lng
-    gCurrUserLoc.lat = lat
-    gCurrUserLoc.lng = lng
+    locService.getLocs()
+        .then(renderLocs);
+
+    mapService.panTo(gCurrUserLoc.lat, gCurrUserLoc.lng)
+    mapService.addMarker(gCurrUserLoc);
 }
 
 // This function provides a Promise API to the callback-based-api of getCurrentPosition
@@ -50,7 +48,7 @@ function onAddLoc(ev) {
         .then(renderWeather);
 
     new Promise((resolve) => {
-            resolve(currLoc);
+            resolve(currLoc)
         })
         .then(locService.addLoc)
         .then(locService.getLocs)
@@ -82,7 +80,8 @@ function onGoLoc(lat, lng) {
 
 function onDeleteLoc(locId) {
     console.log(locId);
-    locService.deleteLoc(locId)
+    locService.deleteLoc(locId);
+
     locService.getLocs()
         .then(renderLocs);
 }
@@ -92,13 +91,6 @@ function onAddMarker() {
     mapService.addMarker({ lat: 32.0749831, lng: 34.9120554 });
 }
 
-function onGetLocs() {
-    locService.getLocs()
-        .then(locs => {
-            console.log('Locations:', locs);
-            document.querySelector('.locs').innerText = JSON.stringify(locs);
-        });
-}
 // function onGetLocs() {
 //     locService.getLocs()
 //         .then(locs => {
@@ -127,10 +119,30 @@ function onPanTo() {
     mapService.panTo(35.6895, 139.6917);
 }
 
+function searchParams() {
+    const url = new URL(window.location.href);
+    let lat;
+    let lng;
+    if (url.searchParams.get('lat')) {
+        lat = +url.searchParams.get('lat');
+        lng = +url.searchParams.get('lng');
+        gCurrLatLng.lat = lat;
+        gCurrLatLng.lng = lng;
+    }
+}
 
 function onFindPlace(input) {
     const prm = mapService.findPlace(input.value);
     prm.then(res => mapService.panTo(res.lat, res.lng));
+}
+
+function onCopyLink(elBtn) {
+    navigator.clipboard.writeText(`https://izingor.github.io/travel-tip/index.html?lat=${gCurrUserLoc.lat}&lng=${gCurrUserLoc.lng}`)
+
+    elBtn.innerText = 'Copied!'
+    setTimeout(() => {
+        elBtn.innerText = 'Copy Link'
+    }, 2000)
 }
 
 function renderWeather(data) {
@@ -139,19 +151,10 @@ function renderWeather(data) {
                     <h4>Description: ${data.weather[0].description}`
     elWeather.innerHTML = strHTML;
     console.log(data);
-}
-
-function onCopyLink(elBtn) {
     if (!gCurrUserLoc) {
         getPosition()
             .then(pos => {
                 gCurrUserLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
             })
     }
-    navigator.clipboard.writeText(`https://izingor.github.io/travel-tip/index.html?lat=${gCurrUserLoc.lat}&lng=${gCurrUserLoc.lng}`)
-
-    elBtn.innerText = 'Copied!'
-    setTimeout(() => {
-        elBtn.innerText = 'Copy Link'
-    }, 2000)
 }
